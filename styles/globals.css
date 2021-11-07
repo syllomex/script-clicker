@@ -1,9 +1,23 @@
+:root {
+  --primary: #0288d1;
+  --background: #282c34;
+  --background-dark: #1c1f25;
+  --text: #fefefe;
+  --money: #21b71e;
+  --commit: #ef9815;
+  --medium: #9bdcff;
+  --danger: #ff7373;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: 'Fira Mono', monospace;
+  color: var(--text);
+
+  background-color: var(--background);
+  font-size: 62.5%;
 }
 
 a {
@@ -13,4 +27,11 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.root {
+  width: 100vw;
+  height: 100vh;
+
+  font-size: 1.4rem;
 }
