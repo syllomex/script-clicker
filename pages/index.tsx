@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   );
 };
 
-const Wrapper: React.FC<{ data: string }> = ({ data }) => {
+const Wrapper: React.FC<{ data?: string }> = ({ data }) => {
   return (
     <GameProvider encrypted={data}>
       <Home />
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      data,
+      data: data || null,
     },
   };
 };

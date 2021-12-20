@@ -2,10 +2,27 @@ import React from "react";
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
+export type ProjectData = {
+  id: string;
+  name: string;
+  value: number;
+  requiredCommits: number;
+  difficulty: string;
+};
+
 export type GameData = {
+  developersName: string;
+
   experience: number;
   experiencePerClick: number;
-  developersName: string;
+  experiencePerSecond: number;
+
+  commits: number;
+  commitsPerSecond: number;
+  commitsPerClick: number;
+
+  workingProjects: ProjectData[];
+  pendingProjects: ProjectData[];
 };
 
 export type GameContext = {
@@ -13,6 +30,14 @@ export type GameContext = {
   setData: SetState<GameData>;
 };
 
-type _SetData<K, V> = (key: K, value: V) => void; 
+type _SetData<K, V> = (key: K, value: V) => void;
 
-export type SetData = _SetData<'experience', number>;
+export type SetData = _SetData<"experience", number>;
+
+export type IncreaseCommitsOptions = {
+  amount?: number;
+};
+
+export type IncreaseExpOptions = {
+  amount?: number;
+};

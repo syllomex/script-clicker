@@ -1,17 +1,34 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import nookies from "nookies";
 
 import { decrypt, encrypt } from "../../services/crypt";
 
-import { GameContext as GameContextT, GameData } from "./types";
+import {
+  GameContext as GameContextT,
+  GameData,
+  IncreaseCommitsOptions,
+  IncreaseExpOptions,
+} from "./types";
 
 const GameContext = React.createContext({} as GameContextT);
 
 const initialData: GameData = {
   experience: 0,
   experiencePerClick: 1,
+  experiencePerSecond: 0,
+  commits: 0,
+  commitsPerSecond: 0,
   developersName: "Developer's name",
+  commitsPerClick: 0.1,
+  pendingProjects: [],
+  workingProjects: [],
 };
 
 const store = (data: GameData) => {
@@ -42,7 +59,9 @@ export const GameProvider: React.FC<{ encrypted?: string }> = ({
   const [loaded, setLoaded] = useState(!!encrypted);
 
   const [data, setData] = useState<GameData>(
-    encrypted ? JSON.parse(decrypt(encrypted)) : initialData
+    encrypted
+      ? { ...initialData, ...JSON.parse(decrypt(encrypted)) }
+      : initialData
   );
 
   useEffect(() => {
@@ -65,6 +84,11 @@ export const GameProvider: React.FC<{ encrypted?: string }> = ({
 export const useGame = () => {
   const { data, setData: _setData } = useContext(GameContext);
 
+  const hasWorkingProjects = useMemo(
+    () => data.workingProjects.length > 0,
+    [data.workingProjects.length]
+  );
+
   const setData = useCallback(
     (callback: (_data: GameData) => Partial<GameData>) => {
       _setData((cur) => {
@@ -82,7 +106,7 @@ export const useGame = () => {
   );
 
   const increaseExp = useCallback(
-    (amount?: number) => {
+    ({ amount }: IncreaseExpOptions) => {
       setData((cur) => ({
         experience: cur.experience + (amount || cur.experiencePerClick),
       }));
@@ -90,5 +114,16 @@ export const useGame = () => {
     [setData]
   );
 
-  return { data, setEncryptedData, increaseExp };
+  const increaseCommits = useCallback(
+    ({ amount }: IncreaseCommitsOptions) => {
+      if (!hasWorkingProjects) return;
+
+      setData((cur) => ({
+        commits: cur.commits + (amount || cur.commitsPerClick),
+      }));
+    },
+    [hasWorkingProjects, setData]
+  );
+
+  return { data, setEncryptedData, increaseExp, increaseCommits };
 };

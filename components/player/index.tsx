@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import Image from "next/image";
 
 import Title from "../title";
-import Experience from "../experience";
+import Circle from "../circle";
 
 import { useGame } from "../../context/game";
 
@@ -11,7 +11,7 @@ import { Container } from "./styles";
 import enter from "../../assets/images/enter.png";
 
 const Player: React.FC = () => {
-  const { data, increaseExp } = useGame();
+  const { data, increaseExp, increaseCommits } = useGame();
 
   const floatingNumbersContainer = useRef<HTMLDivElement>(null);
 
@@ -34,17 +34,18 @@ const Player: React.FC = () => {
     floatingNumbersContainer.current.appendChild(floatingNumber);
   }, [data.experiencePerClick]);
 
-  const increase = useCallback(() => {
-    increaseExp();
+  const handleClick = useCallback(() => {
+    increaseExp({});
+    increaseCommits({});
     createFloatingNumber();
-  }, [createFloatingNumber, increaseExp]);
+  }, [createFloatingNumber, increaseCommits, increaseExp]);
 
   return (
     <Container>
       <div>
         <Title>{data.developersName}</Title>
 
-        <div className="image-container" onClick={increase}>
+        <div className="image-container" onClick={handleClick}>
           <div ref={floatingNumbersContainer} />
           <Image
             src={enter}
@@ -58,7 +59,7 @@ const Player: React.FC = () => {
         </div>
       </div>
       <div>
-        <Experience amount={data.experience} />
+        <Circle amount={data.experience} type="experience" />
       </div>
     </Container>
   );

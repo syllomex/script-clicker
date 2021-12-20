@@ -1,5 +1,6 @@
 import React from "react";
 import Player from "../player";
+import Projects from "../projects";
 
 import { Container } from "./styles";
 
@@ -10,7 +11,9 @@ const Main: React.FC = () => {
         <Player />
       </div>
 
-      <div className="column"></div>
+      <div className="column">
+        <Projects />
+      </div>
       <div className="column"></div>
     </Container>
   );
